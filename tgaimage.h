@@ -11,7 +11,7 @@ and it could take up more.
 */
 
 #pragma pack(push,1)
-typedef struct {
+struct TGA_Header {
     char idlength;             // # characters in id field
     char colormap_type;        // color-mapping type. 1 for color-mapped img
     char datatype_code;        // image type code. there's diff img types
@@ -24,6 +24,32 @@ typedef struct {
     short height;              // img height
     char bitspp;               // bits per pixel
     char imagedesc;            
-} TGA_header;
+};
 #pragma pack(pop)
+
+struct TGA_Color {
+    unsigned char rgb_vals[4];
+    unsigned char bytespp;
+    TGA_Color(unsigned char B, unsigned char G, unsigned char R, unsigned char A) : rgb_vals{B,G,R,A}, bytespp(4) {}
+    
+};
+
+class TGA_Image {
+    unsigned char* data;
+    int width;
+    int height;
+    int bytespp;
+    
+    enum FormatBytes {
+        GRAYSCALE = 1, RGB = 3, RGBA = 4
+    };
+
+    TGA_Image();
+    TGA_Image(int width, int height, TGA_Color color);
+    // not defined yet : scale, get
+    // bool flip_horizontally();
+    // bool flip_verticaly();
+    bool set(int x, int y, TGA_Color color);
+    ~TGA_Image();
+};
 #endif
